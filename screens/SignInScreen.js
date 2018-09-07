@@ -5,8 +5,10 @@ import {
     View,
     AsyncStorage
 } from 'react-native';
+import { connect } from 'react-redux';
+import { saveUserToken } from '../actions';
 
-export default class SignInScreen extends React.Component {
+class SignInScreen extends React.Component {
     static navigationOptions = {
         title: 'Please sign in',
     };
@@ -19,9 +21,14 @@ export default class SignInScreen extends React.Component {
         );
     }
 
-    _signInAsync = async () => {
-        await AsyncStorage.setItem('userToken', 'abc');
-        this.props.navigation.navigate('App');
+    _signInAsync = () => {
+        this.props.saveUserToken()
+            .then(() => {
+                this.props.navigation.navigate('App');
+            })
+            .catch((error) => {
+                this.setState({ error })
+            })
     };
 };
 
@@ -33,3 +40,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+const mapStateToProps = state => ({
+    token: state.token,
+});
+
+
+const mapDispatchToProps = dispatch => ({
+    saveUserToken: () => dispatch(saveUserToken()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

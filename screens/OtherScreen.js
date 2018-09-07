@@ -5,9 +5,13 @@ import {
     StatusBar,
     StyleSheet,
     View,
+    Text,
 } from 'react-native';
 
-export default class OtherScreen extends React.Component {
+import { connect } from 'react-redux';
+import { removeUserToken } from '../actions';
+
+class OtherScreen extends React.Component {
     static navigationOptions = {
         title: 'Lots of features here',
     };
@@ -17,6 +21,7 @@ export default class OtherScreen extends React.Component {
             <View style={styles.container}>
                 <Button title="I'm done, sign me out" onPress={this._signOutAsync} />
                 <StatusBar barStyle="default" />
+                <Text>  Here is the user token {this.props.token.token}</Text>
             </View>
         );
     }
@@ -36,3 +41,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+const mapStateToProps = state => ({
+    token: state.token,
+});
+
+const mapDispatchToProps = dispatch => ({
+    removeUserToken: () => dispatch(removeUserToken()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherScreen);

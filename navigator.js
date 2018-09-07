@@ -7,8 +7,8 @@ import AuthLoadingScreen from './screens/AuthLoadingScreen';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 
 
-const AppStack = createStackNavigator({ Home: HomeScreen, Other: OtherScreen });
-const AuthStack = createStackNavigator({ SignIn: SignInScreen});
+ export const AppStack = createStackNavigator({ Home: HomeScreen, Other: OtherScreen });
+ export const AuthStack = createStackNavigator({ SignIn: SignInScreen});
 
 export const AppNavigator = createSwitchNavigator(
     {

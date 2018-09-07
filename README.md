@@ -1,4 +1,4 @@
-This project shows different  ways you can handle authentication in your React-Native app  using  **Redux** and **React Context-API**
+This project shows different  ways you can persist user authentication in your React-Native app  using  **Redux** and **React Context-API**
 
  The sample shown on react-navigation official website can be found here  [React native authentication](https://reactnavigation.org/docs/en/auth-flow.html).
 

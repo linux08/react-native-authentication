@@ -26,9 +26,14 @@ class OtherScreen extends React.Component {
         );
     }
 
-    _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('Auth');
+    _signOutAsync =  () => {
+        this.props.removeUserToken()
+            .then(() => {
+                this.props.navigation.navigate('Auth');
+            })
+            .catch(error => {
+                this.setState({ error })
+            })
     };
 }
 

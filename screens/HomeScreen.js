@@ -18,8 +18,12 @@ class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+            <View>
                 <Button title="Show me more of the app" onPress={this._showMoreApp} />
-                <Button style={{ marginTop: 10 }} title="Actually, sign me out :)" onPress={this._signOutAsync} />
+            </View>
+            <View style={{ marginTop: 10 }}>
+                <Button title="Actually, sign me out :)" onPress={this._signOutAsync} />
+            </View>
             </View>
         );
     }
@@ -28,7 +32,7 @@ class HomeScreen extends React.Component {
         this.props.navigation.navigate('Other');
     };
 
-    _signOutAsync = async () => {
+    _signOutAsync =  () => {
         this.props.removeUserToken()
             .then(() => {
                 this.props.navigation.navigate('Auth');

@@ -6,8 +6,38 @@ export const MyContext = React.createContext();
 
 export default class MyProvider extends Component {
     state = {
-        token: ''
-    };
+        token: '',
+        saveToken: async () => {
+            try {
+                const resp = await AsyncStorage.setItem('userToken', 'abc');
+                return resp;
+            }
+            catch (error) {
+                this.setState({ error })
+            }
+
+        },
+        removeToken: async () => {
+            try {
+                const resp = await AsyncStorage.removeItem('userToken');
+                return resp
+            }
+            catch (error) {
+                this.setState({ error })
+            }
+        },
+        getToken: async () => {
+            try {
+                const resp = await AsyncStorage.getItem('userToken');
+                return resp;
+            }
+            catch (error) {
+                this.setState({ error })
+            }
+        }
+
+    }
+
 
     componentWillMount() {
         AsyncStorage.getItem('userToken')
@@ -19,15 +49,9 @@ export default class MyProvider extends Component {
             })
     }
 
-
-
     render() {
         return (
-            <MyContext.Provider
-                value={{
-                    state: this.state
-                }}
-            >
+            <MyContext.Provider value={this.state}>
                 {this.props.children}
             </MyContext.Provider>
         );

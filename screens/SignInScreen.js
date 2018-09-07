@@ -5,24 +5,36 @@ import {
     View,
     AsyncStorage
 } from 'react-native';
+import { MyContext } from '../Provider';
 
 export default class SignInScreen extends React.Component {
     static navigationOptions = {
         title: 'Please sign in',
     };
 
+    _signInAsync = async (saveToken) => {
+        saveToken()
+            .then((data) => {
+                this.props.navigation.navigate('App');
+            })
+            .catch((error) => {
+                this.setState({ error })
+            })
+
+    };
+
     render() {
         return (
             <View style={styles.container}>
-                <Button title="Sign in!" onPress={this._signInAsync} />
+                <MyContext.Consumer>
+                    {context => ((
+                        <Button title="Sign in!" onPress={() => this._signInAsync(context.saveToken)} />
+                    ))}
+                </MyContext.Consumer>
             </View>
         );
     }
 
-    _signInAsync = async () => {
-        await AsyncStorage.setItem('userToken', 'abc');
-        this.props.navigation.navigate('App');
-    };
 };
 
 const styles = StyleSheet.create({

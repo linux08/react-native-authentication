@@ -1,40 +1,13 @@
 import React from 'react';
 import {
-  ActivityIndicator,
-  AsyncStorage,
-  StatusBar,
-  StyleSheet,
-  View,
+    ActivityIndicator,
+    AsyncStorage,
+    StatusBar,
+    StyleSheet,
+    View,
 } from 'react-native';
+import { MyContext } from '../Provider';
 
-export default class AuthLoadingScreen extends React.Component {
-    static navigationOptions = {
-        header: null,
-        };
-    constructor() {
-        super();
-        this._bootstrapAsync();
-    }
-
-    // Fetch the token from storage then navigate to our appropriate place
-    _bootstrapAsync = async () => {
-        const userToken = await AsyncStorage.getItem('userToken');
-
-        // This will switch to the App screen or Auth screen and this loading
-        // screen will be unmounted and thrown away.
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
-    };
-
-    // Render any loading content that you like here
-    render() {
-        return (
-            <View style={styles.container}>
-                <ActivityIndicator />
-                <StatusBar barStyle="default" />
-            </View>
-        );
-    }
-}
 
 const styles = StyleSheet.create({
     container: {
@@ -43,3 +16,62 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+class AuthLoadingScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
+    constructor() {
+        super();
+
+    }
+    componentDidMount() {
+        this._bootstrapAsync();
+    }
+
+    // Fetch the token from storage then navigate to our appropriate place
+    _bootstrapAsync = async () => {
+
+        this.props.context.getToken()
+            .then((userToken) => {
+                // This will switch to the App screen or Auth screen and this loading
+                // screen will be unmounted and thrown away.
+                this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+            })
+            .catch(error => {
+                this.setState({ error });
+            })
+
+    };
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <MyContext.Consumer>
+                    {context => ((
+                        <View>
+                            <ActivityIndicator />
+                            <StatusBar barStyle="default" />
+                        </View>
+                    ))}
+                </MyContext.Consumer>
+            </View>
+        );
+    }
+};
+
+
+const ForwardRef = React.forwardRef((props, ref) => (
+    <MyContext.Consumer>
+        {context => <AuthLoadingScreen context={context} {...props} />}
+    </MyContext.Consumer>
+));
+
+export default ({ navigation }) => (
+    <View style={styles.container}>
+        <ForwardRef
+            navigation={navigation}
+        />
+    </View>
+
+)

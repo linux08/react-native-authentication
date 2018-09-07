@@ -5,7 +5,9 @@ import {
     StatusBar,
     StyleSheet,
     View,
+    Text,
 } from 'react-native';
+import { MyContext } from '../Provider';
 
 export default class OtherScreen extends React.Component {
     static navigationOptions = {
@@ -15,15 +17,27 @@ export default class OtherScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Button title="I'm done, sign me out" onPress={this._signOutAsync} />
-                <StatusBar barStyle="default" />
+                <MyContext.Consumer>
+                    {context => ((
+                        <View>
+                            <Button title="I'm done, sign me out" onPress={() => this._signOutAsyn(removeToken)} />
+                            <Text> Here is your token  {context.token} </Text>
+                            <StatusBar barStyle="default" />
+                        </View>
+                    ))}
+                </MyContext.Consumer>
             </View>
         );
     }
 
-    _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('Auth');
+    _signOutAsync = async (removeToken) => {
+        removeToken()
+            .then(() => {
+                this.props.navigation.navigate('Auth');
+            })
+            .catch(error => {
+                this.setState({ error })
+            })
     };
 }
 

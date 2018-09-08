@@ -20,3 +20,5 @@ $ npm i
 ```
 $ npm start
 ```
+
+Link to tutorial here  https://medium.com/@holy_abimz/persisting-user-authentication-in-a-react-native-app-778e028ac816
